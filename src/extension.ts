@@ -14,12 +14,10 @@ import * as fft from './commands/file_from_template'
  */
 export function activate(context: vscode.ExtensionContext) {
     // Initializes the template manager.
-    let config = vscode.workspace.getConfiguration('fbsgen')
-    //let templatesManager = new TemplatesManager(vscode.workspace.getConfiguration('fbsgen'))
-
+    
     // register extension commands
     context.subscriptions.push(vscode.commands.registerCommand('extension.fileFromTemplate',
-        fft.run.bind(newConfig(config.get('templates_dir', '')))))
+        fft.run.bind(newConfig(''))))
 }
 
 // this method is called when your extension is deactivated
