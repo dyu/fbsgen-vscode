@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"target": "es6",
+		"lib": [
+			"es6"
+		],
+		"sourceMap": true,
+    "declaration": true,
+    "noImplicitAny": false,
+    "preserveConstEnums": false,
+    "emitDecoratorMetadata": false,
+    "experimentalDecorators": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "strictNullChecks": true,
+    "noImplicitThis": true,
+    "removeComments": false,
+    "outDir": "target"
+	},
+	"exclude": [
+		"node_modules"
+	]
+}
