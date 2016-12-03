@@ -3,7 +3,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { exec } from 'child_process'
 
-import { Config, getUserDir, mkdirIfNotExist, getParentDirIfFile } from '../config'
+import { Config, getUserDir, mkdirIfNotExist, getParentDirIfFile, listDirs, listFiles } from '../config'
 
 function showError(msg: string) {
     vscode.window.showErrorMessage(msg)
@@ -54,37 +54,31 @@ export function run(this: Config, args: any) {
             return
         }
 
-        // ask for filename
+        // ask for name
         let inputOptions = <vscode.InputBoxOptions>{
-            prompt: 'Enter name ' + JSON.stringify(selection),
-            value: destDir
+            prompt: 'Enter name',
+            value: ''
         }
 
-        vscode.window.showInputBox(inputOptions).then(filename => {
-            if (!filename)
+        vscode.window.showInputBox(inputOptions).then(name => {
+            if (!name)
                 return
-            
-            exec(`cd ${destDir} && echo TODO`, function(error, stdout, stderr) {
-                if (error)
-                    showError(String(stderr))
-            });
+
+            let srcDir = path.join(templates_dir, selection)
+            listFiles(srcDir).then((files: string[]) => {
+                files.length && exec(buildCliArgs(jar_file, srcDir, destDir, name, files), cbExec);
+            })
         })
     })
 }
 
-function listDirs(dir: string): Promise<string[]> {
-	return new Promise((resolve, reject) => {
-        fs.readdir(dir, (err, files) => {
-            let dirs: string[] = []
-            for (let f of files) {
-                if (fs.statSync(path.join(dir, f)).isDirectory()) {
-                    dirs.push(f)
-                }
-            }
-            if (!dirs.length)
-                showError('No dirs found in ' + dir)
-
-            resolve(dirs)
-        })
-	})
+function buildCliArgs(jar_file: string, srcDir: string, destDir: string, name: string, files: string[]) {
+    return `java -Dcli.p_block=true -jar ${jar_file} : ${srcDir} ${destDir} name:${name} dot:. : ${files.join(' ')}`
 }
+
+function cbExec(error, stdout, stderr) {
+    if (error)
+        showError(String(stderr))
+}
+
+

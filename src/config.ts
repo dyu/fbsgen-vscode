@@ -2,6 +2,8 @@ import * as os from 'os'
 import * as path from 'path'
 import * as fs from 'fs'
 
+import { window } from 'vscode'
+
 export interface Config {
     templates_dir: string
     user_dir: string
@@ -46,4 +48,37 @@ export function mkdirIfNotExist(dir: string, dirToCreate: string): string {
 
 export function getParentDirIfFile(dir: string): string {
     return fs.statSync(dir).isDirectory() ? dir : path.join(dir, '..')
+}
+
+export function isDir(f: string): boolean {
+    return fs.statSync(f).isDirectory()
+}
+
+export function isFile(f: string): boolean {
+    return !fs.statSync(f).isDirectory()
+}
+
+export function listDirs(dir: string): Promise<string[]> {
+    return list(dir, isDir)
+}
+
+export function listFiles(dir: string): Promise<string[]> {
+    return list(dir, isFile)
+}
+
+export function list(dir: string, fn: (f: string) => boolean): Promise<string[]> {
+	return new Promise((resolve, reject) => {
+        fs.readdir(dir, (err, files) => {
+            let dirs: string[] = []
+            for (let f of files) {
+                if (fn(path.join(dir, f))) {
+                    dirs.push(f)
+                }
+            }
+            if (!dirs.length)
+                window.showErrorMessage('No dirs found in ' + dir)
+
+            resolve(dirs)
+        })
+	})
 }
