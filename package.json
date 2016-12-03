@@ -27,6 +27,17 @@
           "command": "extension.fileFromTemplate"
         }
       ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "fbsgen config",
+      "properties": {
+        "fbsgen.templates_dir": {
+          "type": "string",
+          "default": "",
+          "description": "If not provided, it defaults to ~/.config/Code/User/fbsgen-templates"
+        }
+      }
     }
   },
   "scripts": {
