@@ -24,7 +24,7 @@ export function run(this: Config, args: any) {
         vsconfig = vscode.workspace.getConfiguration('fbsgen'),
         user_dir = config.user_dir,
         override_dir = vsconfig.get('templates_dir', ''),
-        templates_dir = override_dir ? path.join(rootPath, override_dir) : config.templates_dir
+        templates_dir: string
     
     if (!user_dir)
         config.user_dir = user_dir = getUserDir()
@@ -34,12 +34,19 @@ export function run(this: Config, args: any) {
         showError('The file does not exist: ' + jar_file)
         return
     }
-    
-    if (!templates_dir) {
+
+    if (override_dir) {
+        if (!fs.statSync(templates_dir = path.join(rootPath, override_dir)).isDirectory()) {
+            showError('The dir does not exist: ' + templates_dir)
+            return
+        }
+        config.templates_dir = templates_dir
+    } else if (fs.statSync(templates_dir = path.join(rootPath, 'templates')).isDirectory()) {
+        config.templates_dir = templates_dir
+    } else if (config.templates_dir) {
+        templates_dir = config.templates_dir
+    } else {
         config.templates_dir = templates_dir = mkdirIfNotExist(user_dir, 'fbsgen-templates')
-    } else if (!fs.statSync(templates_dir).isDirectory()) {
-        showError('The dir does not exist: ' + templates_dir)
-        return
     }
 
     let destDir: string
