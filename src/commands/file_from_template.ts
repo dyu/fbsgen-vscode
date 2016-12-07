@@ -83,7 +83,7 @@ export function run(this: Config, args: any) {
 }
 
 function buildCliArgs(jar_file: string, srcDir: string, destDir: string, name: string, files: string[]) {
-    return `java -Dcli.p_block=true -jar ${jar_file} : ${srcDir} ${destDir} name:${name} dot:. : ${files.join(' ')}`
+    return `java -Dcli.p_block=true -jar ${jar_file} : ${srcDir} ${destDir} name:${name} dir_name:${path.basename(destDir)} dir:${destDir} dot:. : ${files.join(' ')}`
 }
 
 function cbExec(error, stdout, stderr) {
