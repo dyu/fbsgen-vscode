@@ -3,7 +3,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { exec } from 'child_process'
 
-import { Config, getUserDir, mkdirIfNotExist, getParentDirIfFile, listDirs, listFiles } from '../config'
+import { Config, getUserDir, mkdirIfNotExist, getParentDirIfFile, listDirs, listFiles, targetDir } from '../config'
 
 function showError(msg: string) {
     vscode.window.showErrorMessage(msg)
@@ -29,7 +29,7 @@ export function run(this: Config, args: any) {
     if (!user_dir)
         config.user_dir = user_dir = getUserDir()
     
-    let jar_file = path.join(user_dir, 'fbsgen.jar')
+    let jar_file = path.join(targetDir, 'fbsgen.jar')
     if (!fs.existsSync(jar_file)) {
         showError('The file does not exist: ' + jar_file)
         return

@@ -2,7 +2,12 @@ import * as os from 'os'
 import * as path from 'path'
 import * as fs from 'fs'
 
-import { window } from 'vscode'
+import { window, extensions } from 'vscode'
+
+export const baseDir = __dirname
+
+let ext = extensions.getExtension('dyu.fbsgen-vscode')!;
+export const targetDir = ext && (ext.extensionPath + '/target') || baseDir
 
 export interface Config {
     templates_dir: string
@@ -29,7 +34,7 @@ export function getUserDir(): string {
             dir = path.join(os.homedir(), 'Library', 'Application Support')
             break
         case 'win32':
-            dir = process.env.APPDATA
+            dir = process.env.APPDATA!
             break
         default:
             throw Error("Unrecognized OS")
