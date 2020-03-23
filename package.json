@@ -2,10 +2,14 @@
   "name": "fbsgen-vscode",
   "version": "0.1.0",
   "description": "dev tools",
-  "private": true,
   "author": "dyu",
   "publisher": "dyu",
   "icon": "fbsgen.png",
+  "homepage": "https://github.com/dyu/fbsgen-vscode",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dyu/fbsgen-vscode.git"
+  },
   "engines": {
     "vscode": "^1.6.0"
   },
