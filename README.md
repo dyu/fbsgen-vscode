@@ -1,5 +1,7 @@
 ## Generate (multiple) files using fbsgen-ds templates
 
+The ```templates``` dir should placed in the root dir of your project
+
 ```templates/hello/{{name}}.ts.stg```
 ```ts
 import "fbsgen/base"
